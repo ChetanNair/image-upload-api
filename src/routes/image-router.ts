@@ -1,24 +1,13 @@
 import { Request, Response, Router } from 'express';
-import StatusCodes from 'http-status-codes';
+import { imageController } from "../controllers/image-controller";
 
 const imageRouter = Router();
-const { CREATED, OK } = StatusCodes
 
-
-//Show all images
-imageRouter.get('/', async (req: Request, res: Response) => {
-    //const images = await getAllImages();
-    //return res.status(OK).json({images});
-    return res.send("This should return all the images and display");
-});
-
-//Upload a single image
-imageRouter.post('/upload', async (req: Request, res: Response) => {
-    //const images = await getAllImages();
-    //return res.status(OK).json({images});
-    return res.send("This should upload an image");
-});
-
+//Connecting up routes to controller methods
+imageRouter.get('/', imageController.showAll);
+imageRouter.get('/upload', imageController.uploadImage);
+imageRouter.get('/fav', imageController.toggleFavourite);
+imageRouter.get('/edit', imageController.editImage);
 
 
 export default imageRouter;
