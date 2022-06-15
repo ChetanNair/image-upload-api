@@ -1,21 +1,39 @@
+import { Multer } from "multer";
 import prisma from "../config/prisma";
+import supabase from "../config/supabase";
 
 class imageModel {
   //Gets all images on the database
   static async getImages() {
     const images = await prisma.images.findMany();
+
     return images;
   }
 
   //Uploads a single image to the database
-  static async uploadImage(name: string, link: string, favourite: boolean) {
+  static async uploadImage(
+    name: string,
+    link: string,
+    favourite: string,
+    file?: Express.Multer.File
+  ) {
     const image = await prisma.images.create({
       data: {
         link: link,
-        favourite: favourite,
+        favourite: favourite == "true",
         name: name,
       },
     });
+
+    //Upload buffer data to database
+    if (file) {
+      const filepath = `/pictures/${image.id}`;
+      console.log(filepath);
+      const { data, error } = await supabase.storage
+        .from("images")
+        .upload(filepath, file.buffer);
+      console.log(data, error);
+    }
     return image;
   }
 

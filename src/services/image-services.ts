@@ -5,8 +5,13 @@ const fetchAllImages = async () => {
   return images;
 };
 
-const uploadImage = async (name: string, link: string, favourite: boolean) => {
-  const image = await imageModel.uploadImage(name, link, favourite);
+const uploadImage = async (
+  name: string,
+  link: string,
+  favourite: string,
+  file?: Express.Multer.File
+) => {
+  const image = await imageModel.uploadImage(name, link, favourite, file);
   return image;
 };
 
