@@ -15,4 +15,9 @@ const editImage = async (uid: number, newLink: string) => {
     return image;
 }
 
-export { fetchAllImages, uploadImage, editImage };
+const toggleFav = async (uid: number) => {
+    const image = await imageModel.toggleFav(uid);
+    return image;
+}
+
+export { fetchAllImages, uploadImage, editImage, toggleFav };

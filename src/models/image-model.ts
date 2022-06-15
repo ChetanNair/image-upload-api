@@ -1,4 +1,3 @@
-import { PrismaClient } from "@prisma/client";
 import prisma from "../config/prisma";
 
 class imageModel {
@@ -22,7 +21,7 @@ class imageModel {
 
     //Edits the link to an existing image on the database
     static async editImage(uid: number, newLink: string) {
-        const newImage = await prisma.images.update({
+        const editedImage = await prisma.images.update({
             where: {
                 id: uid,
             },
@@ -30,16 +29,28 @@ class imageModel {
                 link: newLink,
             },
         });
+        return editedImage;
+    }
+
+    //Toggles whether an image is favourited or not
+    static async toggleFav(uid: number) {
         const image = await prisma.images.findUnique({
             where: {
                 id: uid,
             },
         });
-        return image;
-
-
+        const toggledImage = await prisma.images.update({
+            where: {
+                id: uid,
+            },
+            data: {
+                favourite: !image?.favourite,
+            },
+        });
+        return toggledImage
 
     }
+
 }
 
 

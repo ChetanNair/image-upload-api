@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { fetchAllImages, uploadImage, editImage } from '../services/images-services'
+import { fetchAllImages, uploadImage, editImage, toggleFav } from '../services/image-services'
 
 //Imagecontroller class with methods that correspond to various endpoints
 class _imageController {
@@ -25,8 +25,10 @@ class _imageController {
     }
 
     //Allows client to toggle whether 
-    toggleFavourite = async (req: Request, res: Response, next: NextFunction) => {
-        return res.send("This is how you would toggle whether an image is favourited or not");
+    toggleFav = async (req: Request, res: Response, next: NextFunction) => {
+        const { uid } = req.body;
+        const toggledImage = await toggleFav(uid);
+        return res.send("Favourite has been toggled");
     }
 
 } 
