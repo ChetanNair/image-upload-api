@@ -5,8 +5,8 @@ const fetchAllImages = async () => {
     return images;
 };
 
-const uploadImage = async (link: string, favourite: boolean) => {
-    const image = await imageModel.uploadImage(link, favourite);
+const uploadImage = async (name: string, link: string, favourite: boolean) => {
+    const image = await imageModel.uploadImage(name, link, favourite);
     return image;
 }
 

@@ -9,12 +9,13 @@ class imageModel {
     }
 
     //Uploads a single image to the database
-    static async uploadImage(link: string, favourite: boolean) {
+    static async uploadImage(name: string, link: string, favourite: boolean) {
         const image = await prisma.images.create({
             data: {
                 link: link, 
-                favourite: favourite
-            }
+                favourite: favourite,
+                name: name
+            },
         });
         return image;
     }

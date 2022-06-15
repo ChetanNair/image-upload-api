@@ -12,8 +12,8 @@ class _imageController {
 
     //Allows client to upload a single image
     uploadImage = async (req: Request, res: Response, next: NextFunction) => {
-        const { link, favourite } = req.body;
-        const image = await uploadImage(link, favourite);
+        const { name, link, favourite } = req.body;
+        const image = await uploadImage(name, link, favourite);
         return res.send("Uploaded the image successfully!");
     }
 
