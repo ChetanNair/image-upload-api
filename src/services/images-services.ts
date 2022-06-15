@@ -5,4 +5,14 @@ const fetchAllImages = async () => {
     return images;
 };
 
-export { fetchAllImages };
+const uploadImage = async (link: string, favourite: boolean) => {
+    const image = await imageModel.uploadImage(link, favourite);
+    return image;
+}
+
+const editImage = async (uid: number, newLink: string) => {
+    const image = await imageModel.editImage(uid, newLink);
+    return image;
+}
+
+export { fetchAllImages, uploadImage, editImage };

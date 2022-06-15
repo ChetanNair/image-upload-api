@@ -5,9 +5,9 @@ const imageRouter = Router();
 
 //Connecting up routes to controller methods
 imageRouter.get('/', imageController.showAll);
-imageRouter.get('/upload', imageController.uploadImage);
-imageRouter.get('/fav', imageController.toggleFavourite);
-imageRouter.get('/edit', imageController.editImage);
+imageRouter.post('/upload', imageController.uploadImage);
+imageRouter.post('/fav', imageController.toggleFavourite);
+imageRouter.put('/edit', imageController.editImage);
 
 
 export default imageRouter;
