@@ -1,11 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
+import { fetchAllImages } from '../services/images-services'
 
 //Imagecontroller class with methods that correspond to various endpoints
 class _imageController {
 
     //Displays all images on the database
     showAll = async (req: Request, res: Response, next: NextFunction) => {
-        return res.send("This is where all the images would be shown");
+        const images = await fetchAllImages();
+        return res.send("Successful retrieval!");
     }
 
     //Allows client to upload a single image of size 2MB
