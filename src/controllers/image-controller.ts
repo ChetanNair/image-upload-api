@@ -5,6 +5,7 @@ import {
   editImage,
   toggleFav,
   getCount,
+  getImage,
 } from "../services/image-services";
 
 //Imagecontroller class with methods that correspond to various endpoints
@@ -13,6 +14,14 @@ class _imageController {
   getCount = async (req: Request, res: Response, next: NextFunction) => {
     const count = await getCount();
     return res.send(`${count}`);
+  };
+
+  //Counts the number of records in the database.
+  getImage = async (req: Request, res: Response, next: NextFunction) => {
+    const { uid } = req.body;
+    const image = await getImage(uid);
+    console.log(image);
+    return res.send(image);
   };
 
   //Displays all images on the database
@@ -31,7 +40,7 @@ class _imageController {
     return res.send("Uploaded the image successfully!");
   };
 
-  //Allows client to edit image name and/or link
+  //Allows client to edit image name
   editImage = async (req: Request, res: Response, next: NextFunction) => {
     const { uid, data } = req.body;
     const image = await editImage(uid, data);

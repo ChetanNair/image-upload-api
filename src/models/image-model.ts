@@ -9,6 +9,16 @@ class imageModel {
     return count;
   }
 
+  //Get a single image using its unique identifier
+  static async getImage(uid: number) {
+    const image = await prisma.images.findUnique({
+      where: {
+        id: uid,
+      },
+    });
+    return image;
+  }
+
   //Gets all images on the database
   //Cursor allows for pagination
   static async getImages(cursor?: number, favourite?: boolean, name?: string) {

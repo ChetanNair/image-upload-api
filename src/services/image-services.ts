@@ -33,4 +33,16 @@ const getCount = async () => {
   return count;
 };
 
-export { fetchAllImages, uploadImage, editImage, toggleFav, getCount };
+const getImage = async (uid: number) => {
+  const image = await imageModel.getImage(uid);
+  return image;
+};
+
+export {
+  fetchAllImages,
+  uploadImage,
+  editImage,
+  toggleFav,
+  getCount,
+  getImage,
+};
