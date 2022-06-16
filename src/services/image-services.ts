@@ -1,17 +1,20 @@
 import { imageModel } from "../models/image-model";
 
-const fetchAllImages = async () => {
-  const images = await imageModel.getImages();
+const fetchAllImages = async (
+  cursor?: number,
+  favourite?: boolean,
+  name?: string
+) => {
+  const images = await imageModel.getImages(cursor, favourite, name);
   return images;
 };
 
 const uploadImage = async (
   name: string,
-  link: string,
   favourite: string,
   file?: Express.Multer.File
 ) => {
-  const image = await imageModel.uploadImage(name, link, favourite, file);
+  const image = await imageModel.uploadImage(name, favourite, file);
   return image;
 };
 
@@ -20,9 +23,14 @@ const editImage = async (uid: number, data: JSON) => {
   return image;
 };
 
-const toggleFav = async (uid: number) => {
-  const image = await imageModel.toggleFav(uid);
+const toggleFav = async (uid: number, currentState: boolean) => {
+  const image = await imageModel.toggleFav(uid, currentState);
   return image;
 };
 
-export { fetchAllImages, uploadImage, editImage, toggleFav };
+const getCount = async () => {
+  const count = await imageModel.getCount();
+  return count;
+};
+
+export { fetchAllImages, uploadImage, editImage, toggleFav, getCount };

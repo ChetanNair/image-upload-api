@@ -4,21 +4,30 @@ import {
   uploadImage,
   editImage,
   toggleFav,
+  getCount,
 } from "../services/image-services";
 
 //Imagecontroller class with methods that correspond to various endpoints
 class _imageController {
+  //Counts the number of records in the database.
+  getCount = async (req: Request, res: Response, next: NextFunction) => {
+    const count = await getCount();
+    return res.send(`${count}`);
+  };
+
   //Displays all images on the database
   showAll = async (req: Request, res: Response, next: NextFunction) => {
-    const images = await fetchAllImages();
+    const { cursor, favourite, name } = req.body;
+    const images = await fetchAllImages(cursor, favourite, name);
+    console.log(images);
     return res.send("Successful retrieval!" + images);
   };
 
   //Allows client to upload a single image
   uploadImage = async (req: Request, res: Response, next: NextFunction) => {
     const file = req.file;
-    const { name, link, favourite } = req.body;
-    const image = await uploadImage(name, link, favourite, file);
+    const { name, favourite } = req.body;
+    const image = await uploadImage(name, favourite, file);
     return res.send("Uploaded the image successfully!");
   };
 
@@ -31,8 +40,8 @@ class _imageController {
 
   //Allows client to toggle whether
   toggleFav = async (req: Request, res: Response, next: NextFunction) => {
-    const { uid } = req.body;
-    const toggledImage = await toggleFav(uid);
+    const { uid, currentState } = req.body;
+    const toggledImage = await toggleFav(uid, currentState);
     return res.send("Favourite has been toggled");
   };
 }
