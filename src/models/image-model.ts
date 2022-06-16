@@ -1,8 +1,6 @@
 import prisma from "../config/prisma";
 import supabase from "../config/supabase";
 import fs from "fs";
-import { fileFilter } from "src/config/multer";
-import { builtinModules } from "module";
 
 class imageModel {
   //Get number of records in the database
@@ -59,6 +57,11 @@ class imageModel {
     if (file) {
       const extension = file.mimetype.split("/")[1];
       const picture = fs.readFileSync(`./temp/${file.originalname}`);
+      fs.unlink(`./temp/${file.originalname}`, (err) => {
+        if (err) {
+          console.error(err);
+        }
+      });
       const filepath = `/pictures/${image.id}.${extension}`;
       const { data, error } = await supabase.storage
         .from("images")
