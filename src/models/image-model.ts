@@ -16,7 +16,14 @@ class imageModel {
         id: uid,
       },
     });
-    return image;
+    if (image) {
+      const { publicURL, error } = supabase.storage
+        .from("images")
+        .getPublicUrl(`/pictures/${image.id}`);
+      return publicURL;
+    } else {
+      return {};
+    }
   }
 
   //Gets all images on the database
@@ -46,7 +53,16 @@ class imageModel {
         id: "asc",
       },
     });
-    return images;
+
+    //Gets the URL for each of the images so that they can be displayed on the frontend.
+    const urls: any = {};
+    images.forEach(async (image) => {
+      const { publicURL, error } = supabase.storage
+        .from("images")
+        .getPublicUrl(`/pictures/${image.id}`);
+      urls[image.id] = publicURL;
+    });
+    return urls;
   }
 
   //Uploads a single image
@@ -63,16 +79,17 @@ class imageModel {
       },
     });
 
+    //Need to move the if (file) to the outermost layer
     //Upload the image from the temp folder to the supabase bucket
     if (file) {
-      const extension = file.mimetype.split("/")[1];
+      //const extension = file.mimetype.split("/")[1];
       const picture = fs.readFileSync(`./temp/${file.originalname}`);
       fs.unlink(`./temp/${file.originalname}`, (err) => {
         if (err) {
           console.error(err);
         }
       });
-      const filepath = `/pictures/${image.id}.${extension}`;
+      const filepath = `/pictures/${image.id}`;
       const { data, error } = await supabase.storage
         .from("images")
         .upload(filepath, picture);
