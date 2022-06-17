@@ -9,7 +9,7 @@ const imageRouter = Router();
 //Connecting up routes to controller methods
 imageRouter.get("/count", imageController.getCount);
 imageRouter.get("/getImage", imageController.getImage);
-imageRouter.get("/", imageController.showAll);
+imageRouter.get("/:cursor", imageController.showAll);
 imageRouter.post("/upload", upload.single("file"), imageController.uploadImage);
 imageRouter.put("/fav", imageController.toggleFav);
 imageRouter.put("/edit", imageController.editImage);

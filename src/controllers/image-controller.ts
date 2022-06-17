@@ -13,7 +13,7 @@ class _imageController {
   //Counts the number of records in the database.
   getCount = async (req: Request, res: Response, next: NextFunction) => {
     const count = await getCount();
-    return res.send(`${count}`);
+    return res.send(count);
   };
 
   //Counts the number of records in the database.
@@ -29,7 +29,7 @@ class _imageController {
     const { cursor, favourite, name } = req.body;
     const images = await fetchAllImages(cursor, favourite, name);
     console.log(images);
-    return res.send("Successful retrieval!" + images);
+    return res.send(images);
   };
 
   //Allows client to upload a single image
@@ -37,14 +37,14 @@ class _imageController {
     const file = req.file;
     const { name, favourite } = req.body;
     const image = await uploadImage(name, favourite, file);
-    return res.send("Uploaded the image successfully!");
+    return res.send(image);
   };
 
   //Allows client to edit image name
   editImage = async (req: Request, res: Response, next: NextFunction) => {
     const { uid, data } = req.body;
     const image = await editImage(uid, data);
-    return res.send("Image name has been edited!");
+    return res.send(image);
   };
 
   //Allows client to toggle whether
