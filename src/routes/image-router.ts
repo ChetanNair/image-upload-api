@@ -15,3 +15,5 @@ imageRouter.put("/fav", imageController.toggleFav);
 imageRouter.put("/edit", imageController.editImage);
 
 export default imageRouter;
+
+// /:favourite?/:name?

@@ -26,8 +26,18 @@ class _imageController {
 
   //Displays all images on the database
   showAll = async (req: Request, res: Response, next: NextFunction) => {
-    const { cursor, favourite, name } = req.body;
-    const images = await fetchAllImages(cursor, favourite, name);
+    const { cursor } = req.params;
+    const { favourite, name } = req.query;
+    var fav: any;
+    if (favourite) {
+      fav = favourite == "true";
+    } else {
+      fav = favourite;
+    }
+    let newname = <string>name;
+    console.log(newname);
+    const cursorInt: number = +cursor;
+    const images = await fetchAllImages(cursorInt, fav, newname);
     console.log(images);
     return res.send(images);
   };
