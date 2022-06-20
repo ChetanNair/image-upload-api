@@ -10,17 +10,16 @@ import {
 
 //Imagecontroller class with methods that correspond to various endpoints
 class _imageController {
-  //Counts the number of records in the database.
+  //Returns the number of records in the database.
   getCount = async (req: Request, res: Response, next: NextFunction) => {
     const count = await getCount();
     return res.send(count);
   };
 
-  //Counts the number of records in the database.
+  //Returns a single image object from the database.
   getImage = async (req: Request, res: Response, next: NextFunction) => {
     const { uid } = req.body;
     const image = await getImage(uid);
-    console.log(image);
     return res.send(image);
   };
 
@@ -28,12 +27,16 @@ class _imageController {
   showAll = async (req: Request, res: Response, next: NextFunction) => {
     const { cursor } = req.params;
     const { favourite, name } = req.query;
+
+    //Make sure fav is of type boolean or undefined
     var fav: any;
     if (favourite) {
       fav = favourite == "true";
     } else {
       fav = favourite;
     }
+
+    //Make sure newname is of type string
     let newname = <string>name;
     console.log(newname);
     const cursorInt: number = +cursor;
@@ -57,11 +60,11 @@ class _imageController {
     return res.send(image);
   };
 
-  //Allows client to toggle whether
+  //Allows client to toggle whether an image is favourited or not
   toggleFav = async (req: Request, res: Response, next: NextFunction) => {
     const { uid, currentState } = req.body;
     const toggledImage = await toggleFav(uid, currentState);
-    return res.send("Favourite has been toggled");
+    return res.send(toggledImage);
   };
 }
 

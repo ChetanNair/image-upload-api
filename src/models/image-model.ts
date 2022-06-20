@@ -3,19 +3,22 @@ import supabase from "../config/supabase";
 import fs from "fs";
 
 class imageModel {
-  //Get number of records in the database
+  //Return the number of records in the database
   static async getCount() {
     const count = await prisma.images.count();
     return count;
   }
 
-  //Get a single image using its unique identifier
+  //Returns a single image using its unique identifier
   static async getImage(uid: number) {
+    //Checks if image exists on the database
     const image = await prisma.images.findUnique({
       where: {
         id: uid,
       },
     });
+
+    //If image does exist on the database, return the url from storage
     if (image) {
       const { publicURL, error } = supabase.storage
         .from("images")
@@ -26,7 +29,7 @@ class imageModel {
     }
   }
 
-  //Gets all images on the database
+  //Returns all images on the database
   //Cursor allows for pagination
   static async getImages(cursor?: number, favourite?: boolean, name?: string) {
     if (!cursor) {
@@ -54,7 +57,7 @@ class imageModel {
       },
     });
 
-    //Gets the URL for each of the images so that they can be displayed on the frontend.
+    //Returns the URLs of all the images so that they can be displayed on the frontend.
     const urls: any = {};
     images.forEach(async (image) => {
       const { publicURL, error } = supabase.storage
@@ -65,25 +68,25 @@ class imageModel {
     return urls;
   }
 
-  //Uploads a single image
+  //Upload a single image to the database
   static async uploadImage(
     name: string,
     favourite: string,
     file?: Express.Multer.File
   ) {
-    //First create a database entry for the image
-    const image = await prisma.images.create({
-      data: {
-        favourite: favourite == "true",
-        name: name,
-      },
-    });
-
-    //Need to move the if (file) to the outermost layer
-    //Upload the image from the temp folder to the supabase bucket
     if (file) {
-      //const extension = file.mimetype.split("/")[1];
+      //Create a database entry for the image
+      const image = await prisma.images.create({
+        data: {
+          favourite: favourite == "true",
+          name: name,
+        },
+      });
+
+      //Upload the image from the temp folder to the supabase bucket
       const picture = fs.readFileSync(`./temp/${file.originalname}`);
+
+      //Delete the image from the temp folder
       fs.unlink(`./temp/${file.originalname}`, (err) => {
         if (err) {
           console.error(err);
@@ -94,11 +97,12 @@ class imageModel {
         .from("images")
         .upload(filepath, picture);
       console.log(data, error);
+      return image;
     }
-    return image;
+    return {};
   }
 
-  //Edits the details of an existing image on the database
+  //Edits the details of an existing image on the database and returns an object from the query result
   static async editImageName(uid: number, data: JSON) {
     const editedImage = await prisma.images.update({
       where: {
@@ -109,7 +113,7 @@ class imageModel {
     return editedImage;
   }
 
-  //Toggles whether an image is favourited or not
+  //Toggles whether an image is favourited or not and returns the new image object from the query result
   static async toggleFav(uid: number, currentState: boolean) {
     const toggledImage = await prisma.images.update({
       where: {
