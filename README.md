@@ -19,7 +19,13 @@ This is a simple JSON-based image upload API that you can use to jumpstart an im
 
 Tested with Postman
 
+## Author
 
+Chetan Nair - chetan.r.nair@gmail.com
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE.md file for details
 
 
 
