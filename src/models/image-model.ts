@@ -9,7 +9,7 @@ class imageModel {
     return count;
   }
 
-  //Returns a single image using its unique identifier
+  //Returns the url of a single specified image using its unique identifier
   static async getImage(uid: number) {
     //Checks if image exists on the database
     const image = await prisma.images.findUnique({
@@ -102,7 +102,7 @@ class imageModel {
     return {};
   }
 
-  //Edits the details of an existing image on the database and returns an object from the query result
+  //Edits the details of an existing image on the database and returns a url to the image
   static async editImageName(uid: number, data: JSON) {
     const editedImage = await prisma.images.update({
       where: {
@@ -110,10 +110,17 @@ class imageModel {
       },
       data: data,
     });
-    return editedImage;
+    if (editedImage) {
+      const { publicURL, error } = supabase.storage
+        .from("images")
+        .getPublicUrl(`/pictures/${editedImage.id}`);
+      return publicURL;
+    } else {
+      return {};
+    }
   }
 
-  //Toggles whether an image is favourited or not and returns the new image object from the query result
+  //Toggles whether an image is favourited or not and returns the new image url
   static async toggleFav(uid: number, currentState: boolean) {
     const toggledImage = await prisma.images.update({
       where: {
@@ -123,7 +130,14 @@ class imageModel {
         favourite: !currentState,
       },
     });
-    return toggledImage;
+    if (toggledImage) {
+      const { publicURL, error } = supabase.storage
+        .from("images")
+        .getPublicUrl(`/pictures/${toggledImage.id}`);
+      return publicURL;
+    } else {
+      return {};
+    }
   }
 }
 
